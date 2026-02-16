@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height: 75vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="bg-primary text-white d-inline-block rounded-circle mb-3" style="width: 60px; height: 60px; line-height: 60px;">
+                        <i class="bi bi-person-fill fs-3"></i>
+                    </div>
+                    <h2 class="fw-bold">Welcome Back</h2>
+                    <p class="text-muted">Secure access to your MongoDB cluster</p>
+                </div>
+
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger py-2 small shadow-sm mb-4">
+                            {% for error in form.non_field_errors %}
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small text-uppercase text-muted">{{ field.label }}</label>
+                            <input type="{{ field.field.widget.input_type }}" 
+                                   name="{{ field.html_name }}" 
+                                   class="form-control form-control-lg border-2 {% if field.errors %}is-invalid{% endif %}" 
+                                   placeholder="Enter your {{ field.label|lower }}"
+                                   style="font-size: 1rem;">
+                            {% if field.errors %}
+                                <div class="invalid-feedback fw-bold">
+                                    {{ field.errors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg shadow fw-bold py-3">
+                            Sign In to Dashboard
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="mt-5 text-center border-top pt-4">
+                    <p class="small text-muted mb-1">Restricted Access</p>
+                    <a href="{% url 'user_create' %}" class="text-decoration-none fw-bold small">Contact Administrator for Access</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
